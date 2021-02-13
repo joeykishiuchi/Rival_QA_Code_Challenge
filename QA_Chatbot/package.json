@@ -1,0 +1,15 @@
+{
+  "name": "qa-chatbot",
+  "version": "1.0.0",
+  "description": "QA Challenge for Rival Technologies",
+  "main": "index.js",
+  "author": "Rival Tech",
+  "private": true,
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "supertest": "^6.1.3"
+  }
+}
