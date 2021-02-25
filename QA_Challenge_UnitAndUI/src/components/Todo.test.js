@@ -1,20 +1,39 @@
-/*
-Todo component sample pseudo code test:
-Test 1:
-I would render the Todo component and check that the text decoration style is set to none by default
+/**
+ * @jest-environment jsdom
+ */
 
+import React from 'react';
+import '@testing-library/jest-dom/extend-expect';
+import {render, fireEvent} from '@testing-library/react';
+import Todo from './Todo';
 
-Add a few more tests below that you think help verify the logic and expected behaviour. 
-Do not over test.
+const sampleText = "Sample Text";
+const completedDefault = false;
+let handleClick;
 
+beforeEach(() => {
+  handleClick = jest.fn();
+});
 
-Test 2: 
-Render the Todo component with the 'text' prop and check that the component contains the text.
+it("renders with the text decoration style set to none by default", () => {
+  const { getByText } = render(<Todo onClick={handleClick} completed={completedDefault} text={sampleText}/>);
+  expect(getByText(sampleText)).toHaveStyle('text-decoration: none');
+});
 
-Test 3:
-Render the Todo component with the 'completed' prop set to true and check that the text decoration style is set to 'line-through'.
+it("renders with text decoration style set to line-through when 'completed' prop is set to true", () => {
+  const { getByText } = render(<Todo onClick={handleClick} completed text={sampleText}/>);
+  expect(getByText(sampleText)).toHaveStyle('text-decoration: line-through');
+});
 
-Test 4:
-Render the Todo component with an onClick function and check that it renders a clickable list item.
+it("renders its 'text' prop as text", () => {
+  const { getByText } = render(<Todo onClick={handleClick} completed={completedDefault} text={sampleText}/>);
+  expect(getByText(sampleText)).toBeInTheDocument();
+});
 
-*/
+it("renders a clickable listitem", () => {
+  const { getByText } = render(<Todo onClick={handleClick} completed={completedDefault} text={sampleText}/>);
+  const listitem = getByText(sampleText);
+  fireEvent.click(listitem);
+
+  expect(handleClick).toHaveBeenCalledTimes(1);
+});

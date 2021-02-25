@@ -1,19 +1,51 @@
-/*
-reducers sample pseudo code test:
-Test 1:
-I would pass in an undefined state and empty action as inputs and check that the output returns the initial state.
+import todos from './todos';
 
+const defaultState = [];
 
-Add a few more tests below that you think help verify the logic and expected behaviour. 
-Do not over test.
+it("returns the initial state when passed an empty state and action", () => {
+  const result = todos(defaultState, {});
+  expect(result).toHaveLength(0);
+});
 
-Test 2: 
-Pass an empty state and a mock ADD_TODO action as inputs and check that the output returns a state with an array of length '1'.
+it("returns an array with only the new todo item when passed an empty state and ADD_TODO action", () => {
+  const ADD_ACTION = {
+    type: 'ADD_TODO',
+    id: 1,
+    text: 'sample text'
+  };
 
-Test 3:
-Pass a TOGGLE_TODO action with the same 'id' as the previously added item and check that the output returns a todo item with a truthy 'completed' value.
+  const expected = [
+    { 
+      id: ADD_ACTION.id,
+      text: ADD_ACTION.text,
+      completed: false,
+    }
+  ]
+  const result = todos(defaultState, ADD_ACTION);
 
-Test 4: 
-Pass a TOGGLE_TODO action with the same 'id' as the previously toggled item and check that the output returns a todo item with a falsy 'completed' value.
+  expect(result).toEqual(expect.arrayContaining(expected));
+});
 
-*/
+it("returns toggled 'completed' value on todo item when passed todo item as state and TOGGLE_TODO action", () => {
+  const TOGGLE_ACTION = {
+    type: 'TOGGLE_TODO',
+    id: 1
+  }
+
+  const existingItem ={
+    id: 1,
+    text: 'sampleText',
+    completed: false
+  };
+
+  const expectedState = [
+    {
+      ...existingItem,
+      completed: !existingItem.completed
+    }
+  ];
+
+  const result = todos([existingItem], TOGGLE_ACTION);
+
+  expect(result).toEqual(expect.arrayContaining(expectedState));
+})
